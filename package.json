@@ -1,0 +1,42 @@
+{
+  "name": "shooty-ship-13k",
+  "version": "1.0.0",
+  "description": "Shooty Ship 13k Edition",
+  "scripts": {
+    "test": "jest",
+    "build": "rimraf dist && yarn ex-gratia && webpack",
+    "build:watch": "rimraf dist && webpack --mode development --progress --watch",
+    "serve": "http-server ./dist -p 9999 -o",
+    "start": "concurrently -k -p \"[{name}]\" -n \"Build,Serve\" -c \"cyan.bold,green.bold\" \"npm run build:watch\" \"npm run serve\"",
+	"advzip:ss-tiny": "rimraf dist/apps/shooty-ship-tiny/js/game.js.map && rimraf shooty-ship-tiny.zip && zip -9 -r shooty-ship-tiny.zip dist/apps/shooty-ship-tiny/* && advzip -z -4 -i 20 shooty-ship-tiny.zip",
+	"zip:ss-tiny": "rimraf dist/apps/shooty-ship-tiny/js/game.js.map && rimraf shooty-ship-tiny.zip && zip -9 -r shooty-ship-tiny.zip dist/apps/shooty-ship-tiny/*",
+	"js13k": "yarn build && yarn advzip:ss-tiny"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/svidgen/shooty-ship-13k.git"
+  },
+  "author": "Jon Wire",
+  "license": "AGPL-3.0-only",
+  "bugs": {
+    "url": "https://github.com/svidgen/shooty-ship-13k/issues"
+  },
+  "homepage": "https://github.com/svidgen/shooty-ship-13k#readme",
+  "devDependencies": {
+    "concurrently": "^6.0.2",
+    "copy-webpack-plugin": "^8.1.0",
+    "css-loader": "^5.2.0",
+    "file-loader": "^6.2.0",
+    "http-server": "^0.12.3",
+    "jsdom": "^16.5.2",
+    "marked": "^2.0.1",
+    "raw-loader": "^4.0.2",
+    "rimraf": "^3.0.2",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.28.0",
+    "webpack-cli": "^4.6.0"
+  },
+  "dependencies": {
+    "wirejs-dom": "^1.0.3"
+  }
+}
