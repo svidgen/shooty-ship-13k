@@ -133,7 +133,10 @@ module.exports = (env, argv) => {
 		plugins: [
 			new CopyWebpackPlugin({
 				patterns: [
-					{ from: 'static' },
+					{
+						from: 'static'
+						noErrorOnMissing: true
+					},
 					{
 						from: './src/layouts/**/*.html',
 						to: distPath({
