@@ -3,11 +3,9 @@ const { MouseCoords, NodeBox } = require('/src/lib/coords');
 const { MainLoop } = require('/src/lib/loop');
 const { on } = require('/src/lib/event');
 
+// wait. why am i doing this again?
 global.MainLoop = MainLoop;
 
-
-// for the purpose of minification, maybe these keys become non-parametrized
-// and we just set them statically.
 let HIGHSCORE_KEY = 'shooty-ship-tiny.highscore';
 let SHRAPNEL_TYPES = ['enemy'];
 let ENEMY_TYPES = ['enemy'];
@@ -39,24 +37,18 @@ const Game = DomClass(gameTemplate, function _Board() {
 
 	this.presplash.heading = GAME_NAME;
 
-	// hack.
-	// require()'d CSS rewrites url()'s to be relative to the CSS file.
-	// normally, that's what you'd want. but, it's not what we want, especially
-	// with a common sheet across PWA's.
-	// this.style.backgroundImage = "url('./img/space.svg')";
-
 	this.enable = function() {
 		if (!this.enabled) {
 			this.register_event_proxies();
 			this.enabled = true;
 			MainLoop.addObject(_t);
 		}
-	}; // enable();
+	};
 
 	this.disable = function() {
 		this.unregister_event_proxies();
 		this.enabled = false;
-	}; // disable()
+	};
 
 	this.resize = function() {
 		this.style.width = '100%';
@@ -70,7 +62,8 @@ const Game = DomClass(gameTemplate, function _Board() {
 
 		var box = new NodeBox(this);
 
-		// make square
+		// hack: make square == make relative sizing easier?
+		// at least that was the logic at the time... to be revisited.
 		var max = Math.max(box.width, box.height);
 		var min = Math.min(box.width, box.height);
 		var correction = 100 * max/min;
@@ -87,9 +80,7 @@ const Game = DomClass(gameTemplate, function _Board() {
 			this.minX = comp;
 			this.maxX = 100 - comp;
 		}
-
-	}; // resize()
-
+	};
 
 	this.getSpawnPoint = function() {
 		var x, y;
@@ -101,8 +92,7 @@ const Game = DomClass(gameTemplate, function _Board() {
 			x = Math.random() * this.maxX;
 		}
 		return {x: x, y: y};
-	}; // getSpawnPoint()
-
+	};
 
 	this.step = function() {
 		if (!this.enabled) { return; }
@@ -135,7 +125,7 @@ const Game = DomClass(gameTemplate, function _Board() {
 
 			this.addEnemy(enemy);
 		}
-	}; // step()
+	};
 
 	this.addEnemy = function(enemy) {
 		on(enemy, 'shot', function() {
@@ -237,7 +227,7 @@ const Game = DomClass(gameTemplate, function _Board() {
 			}
 			return rv;
 		};
-	}; // eventProxy()
+	};
 
 	on(_t.presplash, 'restartClick', function() { _t.start(); });
 
@@ -252,15 +242,11 @@ const Game = DomClass(gameTemplate, function _Board() {
 	this.resize();
 	window.onresize = function() {
 		_t.resize();
-	}; // window.onresize()
-
-	// setType(this, 'SS.Board');
-	// onready(this).fire();
+	};
 });
 
 
 const AudioPool = {
-	/* audiocontext: null, */
 	channels : {},
 	play : function(src) {
 		if (typeof(this.channels[src]) == 'undefined') {
@@ -295,21 +281,19 @@ const AudioPool = {
 		r.send();
 		this.channels[src] = player;
 	}
-}; // Audio()
+};
 
 const Button = function() {
 	this.onclick = function() {
 		on(this, 'click').fire();
 		return false;
-	}; // onclick()
+	};
 	this.ontouchend = this.onclick;
-	// setType(this, 'SS.Button');
 };
 
 
 const StartButton = DomClass("<ss:startbutton>Start</ss:startbutton>", function StartButton() {
 	Button.apply(this);
-	// setType(this, 'SS.StartButton');
 });
 
 
@@ -319,9 +303,7 @@ const MagicallySizedObject = function() {
 
 	this.width = 100 * coords.width / pCoords.width;
 	this.height = 100 * coords.height / pCoords.height;
-
-	// setType(this, 'SS.MagicallySizedObject');
-}; // MagicallySizedObject()
+};
 
 
 const Ship = DomClass('<ss:ship></ss:ship>', function Ship() {
@@ -344,21 +326,21 @@ const Ship = DomClass('<ss:ship></ss:ship>', function Ship() {
 			MainLoop.addObject(this);
 			this.enabled = true;
 		}
-	}; // enable()
+	};
 
 	this.disable = function() {
 		if (this.enabled) {
 			MainLoop.removeObject(this);
 			this.enabled = false;
 		}
-	}; // disable();
+	};
 
 	this.leapTo = function(x, y, direction) {
 		this.x = x;
 		this.y = y;
 		this.direction = direction || Math.PI/-2;
 		this.target = {x: _t.x, y: _t.y, direction: _t.direction};
-	}; // leapTo()
+	};
 
 	this.step = function({elapsed}) {
 		if (!elapsed) return;
@@ -375,14 +357,14 @@ const Ship = DomClass('<ss:ship></ss:ship>', function Ship() {
 
 		this.x += xSpeed * elapsed;
 		this.y += ySpeed * elapsed;
-	}; // step()
+	};
 
 	this.draw = function() {
 		var d = Number(this.direction) + (Math.PI/2);
 		rotateCss(this, d);
 		this.style.left = this.x + '%';
 		this.style.top = this.y + '%';
-	}; // draw();
+	};
 
 	this.destroy = function() {
 		if (this.dead || this.disabled) { return; }
@@ -407,13 +389,13 @@ const Ship = DomClass('<ss:ship></ss:ship>', function Ship() {
 
 		on(this, 'destroy').fire();
 		this.style.display = 'none';
-	}; // destroy()
+	};
 
 	this.respawn = function() {
 		this.dead = false;
 		this.style.display = '';
 		this.enable();
-	}; // respawn ()
+	};
 
 	this.pushTo = function(coords) {
 		if (this.dead) { return false; }
@@ -426,7 +408,7 @@ const Ship = DomClass('<ss:ship></ss:ship>', function Ship() {
 		var rise = this.target.y - this.y;
 		var run = this.target.x - this.x;
 		this.target.direction = Math.atan2(rise, run);
-	}; // pushTo()
+	};
 
 	this.shoot = function() {
 		var bullet = new Bullet({
@@ -435,19 +417,13 @@ const Ship = DomClass('<ss:ship></ss:ship>', function Ship() {
 			direction: _t.direction
 		});
 		on(this, 'shoot').fire(bullet);
-	}; // shoot()
+	};
 
 	on(this, 'collide', function(o) {
 		if(isa(o, 'SS.Enemy')) {
 			_t.destroy();
 		}
 	});
-
-	/*
-	this.init = function() {
-		onready(this).fire();
-	};
-	*/
 
 	setType(this, 'SS.Ship');
 });
@@ -474,7 +450,7 @@ const Projectile = function() {
 		on(this, 'destroy').fire();
 		this.dead = true;
 		this.parentNode ? this.parentNode.removeChild(this) : 1;
-	}; // destroy()
+	};
 
 	this.step = function({elapsed}) {
 		var dx = this.x - this.ix;
@@ -488,18 +464,18 @@ const Projectile = function() {
 			this.y += Math.sin(this.direction) * stepSize;
 			this.findCollisions();
 		}
-	}; // step()
+	};
 
 	this.draw = function() {
 		this.style.top = this.y - this.height/2 + '%';
 		this.style.left = this.x - this.width/2 + '%'; 
-	}; // draw()
+	};
 
 	this.findCollisions = function() {
 		for (var i = 0; i < this.conflicts.length; i++) {
 			this.findCollisionsWith(this.conflicts[i]);
 		}
-	}; // findCollisions()
+	};
 
 	this.findCollisionsWith = function(search) {
 		if (this.dead) {
@@ -515,10 +491,8 @@ const Projectile = function() {
 				on(nodes[i], 'collide').fire(this);
 			}
 		}
-	}; // findCollisionsWith()
-
-	// setType(this, 'SS.Projectile');
-}; // Projectile
+	};
+};
 
 
 const Bullet = DomClass('<ss:bullet></ss:bullet>', function _Bullet() {
@@ -536,12 +510,11 @@ const Bullet = DomClass('<ss:bullet></ss:bullet>', function _Bullet() {
 	this.init = function() {
 		AudioPool.play(Bullet.sound);
 		MainLoop.addObject(this);
-		// onready(this).fire();
-	}; // init()
+	};
 
 	Projectile.apply(this);
 	setType(this, 'SS.Bullet');
-}); // Bullet
+});
 Bullet.sound = "audio/pew.mp3";
 AudioPool.prepare(Bullet.sound);
 
@@ -564,14 +537,14 @@ const Enemy = DomClass('<ss:enemy></ss:enemy>', function Enemy() {
 		const rotationStep = elapsed * this.rotationSpeed;
 		this.visibleDirection = this.visibleDirection + rotationStep;
 		this._step({now, elapsed, elapsed_ms});
-	}; // step()
+	};
 
 	var innerDraw = this.draw;
 	this.draw = function() {
 		var d = Number(this.visibleDirection) + (Math.PI/2);
 		rotateCss(this, d);
 		innerDraw.call(this);
-	}; // draw()
+	};
 
 	this.explode = function(v, impact) {
 		on(_t, 'shot').fire();
@@ -581,7 +554,7 @@ const Enemy = DomClass('<ss:enemy></ss:enemy>', function Enemy() {
 			text: v === undefined ? _t.game.score : v
 		}));
 		_t.destroy();
-	}; // explode()
+	};
 
 	on(this, 'collide', function(o) {
 		if (isa(o, 'SS.Bullet')) {
@@ -593,10 +566,10 @@ const Enemy = DomClass('<ss:enemy></ss:enemy>', function Enemy() {
 
 	this.init = function() {
 		MainLoop.addObject(this);
-	}; // init()
+	};
 
 	setType(this, 'SS.Enemy');
-}); // Enemy
+});
 
 
 const BigEnemy = DomClass('<ss:bigenemy></ss:bigenemy>', function _BigEnemy() {
@@ -632,13 +605,12 @@ const BigEnemy = DomClass('<ss:bigenemy></ss:bigenemy>', function _BigEnemy() {
 
 		combined_impact.impactBy(impact);
 
-		// var shrapnel_count = 3; Math.floor(Math.random() * 4);
 		const shrapnel_count = Math.floor(Math.random() * 5);
 		combined_impact.speed = (combined_impact.speed*0.75)/shrapnel_count;
 		for (var i = 0; i < shrapnel_count; i++) {
 			this.emitRandomShrapnel(combined_impact);
 		}
-	}; // explode()
+	};
 
 	this.emitRandomShrapnel = function(impact) {
 		const subtypes = SHRAPNEL_TYPES;
@@ -646,7 +618,7 @@ const BigEnemy = DomClass('<ss:bigenemy></ss:bigenemy>', function _BigEnemy() {
 			var subtype = subtypes[Math.floor(Math.random() * subtypes.length)];
 			this.emitShrapnel(impact, subtype);
 		}
-	}; // emitRandomShrapnel()
+	};
 
 	this.emitShrapnel = function(impact, subtype) {
 		var momentum = new Momentum({
@@ -665,11 +637,11 @@ const BigEnemy = DomClass('<ss:bigenemy></ss:bigenemy>', function _BigEnemy() {
 		});
 
 		on(this, 'shatter').fire(rv);
-	}; // emitShrapnel()
+	};
 
 
 	setType(this, 'SS.BigEnemy');
-}); // Pumpkin
+});
 
 
 const Shrapnel = DomClass('<ss:shrapnel></ss:shrapnel>', function Shrapnel() {
@@ -689,7 +661,7 @@ const Shrapnel = DomClass('<ss:shrapnel></ss:shrapnel>', function Shrapnel() {
 	}
 
 	setType(this, 'SS.Shrapnel');
-}); // Shrapnel
+});
 
 
 const explosionTemplate = `<ss:explosion>
@@ -710,14 +682,14 @@ const Explosion = DomClass(explosionTemplate, function _Explosion() {
 		this.dead = true;
 		this.parentNode.removeChild(this);
 		on(this, 'destroy').fire();
-	}; // destroy()
+	};
 
 	this.step = function({now}) {
 		this.pct = Math.min(1, (now.getTime() - this.startTime.getTime())/this.duration);
 		if (this.pct > 0.98) {
 			this.destroy();
 		}
-	}; // step()
+	};
 
 	this.draw = function() {
 		var c = this.pct * this.radius;
@@ -728,15 +700,14 @@ const Explosion = DomClass(explosionTemplate, function _Explosion() {
 		this.style.opacity = 1 - this.pct;
 		this.style.filter = "alpha(opacity=" + (1 - this.pct) * 100 + ")";
 		this.style.fontSize = this.offsetWidth * 0.5 + 'px';
-	}; // draw()
+	};
 
 	this.init = function() {
 		MainLoop.addObject(this);
 		AudioPool.play(Explosion.sound);
-	}; // init()
+	};
 
-	// setType(this, 'SS.Explosion');
-}); // Explosion
+});
 Explosion.sound = 'audio/pkewh.mp3';
 AudioPool.prepare(Explosion.sound);
 
@@ -752,18 +723,17 @@ const Momentum = function({direction, speed, mass}) {
 		var y = this.getYMomentum() + impactVector.getYMomentum();
 		this.direction = Math.atan2(y, x);
 		this.speed = Math.sqrt(x * x + y * y) / this.mass;
-	}; // impactBy()
+	};
 
 	this.getXMomentum = function() {
 		return Math.cos(this.direction) * this.speed * this.mass;
-	}; // getX()
+	};
 
 	this.getYMomentum = function() {
 		return Math.sin(this.direction) * this.speed * this.mass;
-	}; // getY()
+	};
 
-	// setType(this, 'SS.Momentum');	
-}; // SS.Momentum()
+};
 
 const gameOverSplashTemplate = `<ss:gameoversplash>
 	<div class='background'></div>
@@ -815,7 +785,5 @@ const GameOverSplash = DomClass(gameOverSplashTemplate, function _GameOverSplash
 		setTimeout(function() {
 			_t.classList.add('visible');
 		}, this.delay);
-	}; // init()
-
-	// setType(this, 'SS.GameOverSplash');
-}); // GameOverSplash()
+	};
+});
