@@ -5,7 +5,7 @@ ${meta({
 <html ss:tpdc="http://www.thepointless.com/ns/ss">
 <head>
 	<title>shooty ship 13k</title>
-	<link rel="shortcut icon" type="image/svg" href="img/shooty-ship.svg" />
+	<link rel="shortcut icon" type="image/svg" href="img/shooty-ship.svg?icon" />
 	<meta name='viewport' content='width=device-width, initial-scale=1' />
 	<link rel='stylesheet' href='css/game.css' />
 </head>
