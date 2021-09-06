@@ -1,19 +1,7 @@
-/*
- * copied from src/lib/shooty-ship/game.js for the purpose of trimming down
- * for the purpose of entry into the js13k contest.
- *
- * removing:
- *   * event tracking
- *   * install link
- *   * google ads
- *   * images (maybe)
- */
-
 const { DomClass, setType, isa, getNodes } = require('wirejs-dom');
 const { MouseCoords, NodeBox } = require('/src/lib/coords');
 const { MainLoop } = require('/src/lib/loop');
 const { on } = require('/src/lib/event');
-// require('../css/game.css');
 
 global.MainLoop = MainLoop;
 
