@@ -8,7 +8,7 @@
     "build:watch": "rimraf dist && webpack --mode development --progress --watch",
     "serve": "http-server ./dist -p 9999 -o",
     "start": "concurrently -k -p \"[{name}]\" -n \"Build,Serve\" -c \"cyan.bold,green.bold\" \"npm run build:watch\" \"npm run serve\"",
-	"advzip:ss-tiny": "rimraf dist/js/game.js.map && rimraf game.zip && zip -9 -r game.zip dist/* && advzip -z -4 -i 20 game.zip",
+	"advzip:ss-tiny": "rimraf dist/js/game.js.map && rimraf game.zip && cd dist && zip -9 -r ../game.zip ./* && cd .. && advzip -z -4 -i 20 game.zip",
 	"js13k": "yarn build && yarn advzip:ss-tiny"
   },
   "repository": {
