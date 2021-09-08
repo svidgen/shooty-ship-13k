@@ -582,8 +582,11 @@ const BigEnemy = DomClass('<ss:bigenemy></ss:bigenemy>', function _BigEnemy() {
 	if (this.subtype) {
 		var img = new Image();
 		img.onload = function() {
-			_t.style.width = img.width * _t.scale + 'vmin';
-			_t.style.height = img.height * _t.scale + 'vmin';
+			// SVG's in FF don't have default dimensions, apparently ... 
+			// ... let's just plan on making all the SVG art 100x100.
+			// leaving the sizing math in place for potential extension later.
+			_t.style.width = (img.width || 100) * _t.scale + 'vmin';
+			_t.style.height = (img.height || 100) * _t.scale + 'vmin';
 		};
 		img.src = 'img/' + this.subtype + ".svg";
 		this.style.backgroundImage = "url('" + img.src + "')";
@@ -653,8 +656,9 @@ const Shrapnel = DomClass('<ss:shrapnel></ss:shrapnel>', function Shrapnel() {
 	if (this.subtype) {
 		var img = new Image();
 		img.onload = function() {
-			_t.style.width = img.width * _t.scale + 'vmin';
-			_t.style.height = img.height * _t.scale + 'vmin';
+			// same as for enemy. FF SVG issue.
+			_t.style.width = (img.width || 100) * _t.scale + 'vmin';
+			_t.style.height = (img.height || 100) * _t.scale + 'vmin';
 		};
 		img.src = 'img/' + this.subtype + ".svg";
 		this.style.backgroundImage = "url('" + img.src + "')";
