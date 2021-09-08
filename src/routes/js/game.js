@@ -741,7 +741,10 @@ const gameOverSplashTemplate = `<ss:gameoversplash>
 		<h1 data-id='heading'>Game Over</h1>
 		<div class='scoreline'>Your score: <span data-id='score' class='score'>...?</span></div>
 		<div data-id='maxScoreLine' class='max-scoreline'>Your best: <span data-id='maxScore' class='score'>...?</span></div>
-		<div>Insert static sponsorship ad here.</div>
+		<p><img src='img/shooty-ship.svg' style='width: 5em;' /></p>
+		<p><i>"The world is thy ship; not thy home."</i></p>
+		<p>&ndash; St. Therese of Lisieux</p>
+		<p>(And what better ship than a <b>shooty</b> ship.)</p>
 		<ss:startbutton data-id='restart'>Restart</ss:startbutton>
 		<tpdc:share data-id='share'></tpdc:share>
 		<div class='copyright'><a target='_blank' href='https://www.thepointless.com'>www.thepointless.com</a></div>

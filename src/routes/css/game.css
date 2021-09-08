@@ -34,8 +34,8 @@ ss\:startbutton, ss\:sharebutton {
 ss\:ship {
 	position: absolute;
 	display: block;
-	width: 6.7%;
-	height: 3.8%;
+	width: 5%;
+	height: 5%;
 	text-align: center;
 	background-size: 100% 100%;
 }
