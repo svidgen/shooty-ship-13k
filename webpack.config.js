@@ -4,9 +4,9 @@ const glob = require('glob');
 const CopyWebpackPlugin = require('copy-webpack-plugin'); 
 const marked = require('marked');
 
-const BUILD_ID = (new Date()).getTime();
-
-fs.writeFileSync('./src/build_id.json', JSON.stringify(BUILD_ID.toString()));
+// not used for this project.
+// const BUILD_ID = (new Date()).getTime();
+// fs.writeFileSync('./build_id.json', JSON.stringify(BUILD_ID.toString()));
 
 
 // TODO: Refactor these transforms out of here.
