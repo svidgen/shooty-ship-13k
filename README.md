@@ -3,4 +3,6 @@ Shooty Ship 13k is my reskinned and rejiggered version of [Shooty Ship](https://
 
 ***Pew pew pew!***
 
-Don't forget to check out the "full" versions of the game and other goodies at [thepointless.com](https://www.thepointless.com)!
+If you find this code useful and would like to throw some recognition my way, feel free to link directly back to [thepointless.com](https://www.thepointless.com), where you can also find the other iterations of Shooty Ship!
+
+Happy coding!
